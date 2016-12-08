@@ -43,8 +43,8 @@ while not rp.is_shutdown() and not start:
     RATE.sleep()
 while not rp.is_shutdown():
     LOCK.acquire()
-    bearing_angle = (TARGET_POSITION-position)/np.linalg.norm(TARGET_POSITION-position)
-    msg = gms.Vector(x=bearing_angle[0], y=bearing_angle[1])
+    bearing = (TARGET_POSITION-position)/np.linalg.norm(TARGET_POSITION-position)
+    msg = gms.Vector(*bearing)
     pub.publish(msg)
     LOCK.release()
     RATE.sleep()

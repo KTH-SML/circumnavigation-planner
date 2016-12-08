@@ -13,6 +13,7 @@ neighbor_bearing_measurement = None
 bearing_measurement = None
 
 LOCK = thd.Lock()
+DESIRED_DISTANCE = rp.get_param('desired_distance')
 
 rp.init_node('planner')
 
@@ -56,9 +57,13 @@ rp.Subscriber(
 
 RATE = rp.Rate(30.0)
 start = False
-pub = rp.Publisher(
+cmdvel_pub = rp.Publisher(
     name='cmdvel',
     data_class=gms.Vector,
+    queue_size=1)
+est_pub = rp.Publisher(
+    name='estimate',
+    data_class=gms.Point,
     queue_size=1)
 
 while not rp.is_shutdown() and not start:
@@ -70,8 +75,15 @@ while not rp.is_shutdown() and not start:
     LOCK.release()
     RATE.sleep()
 while not rp.is_shutdown():
+    vel = np.zeros(2)
     LOCK.acquire()
-    msg = gms.Vector(x=0.01, y=0.01)
-    pub.publish(msg)
+    estimate += np.zeros(2)
+    est_dist = np.linalg.norm(position-estimate)
+    vel += bearing_measurement*(DESIRED_DISTANCE-est_dist)
+    #TODO: write the rest of the controller!!
+    cmdvel_msg = gms.Vector(x=vel[0], y=vel[1])
+    est_msg = gms.Point(*estimate)
     LOCK.release()
+    cmdvel_pub.publish(cmdvel_msg)
+    est_pub.publish(est_msg)
     RATE.sleep()

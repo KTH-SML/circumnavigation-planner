@@ -38,8 +38,8 @@ plt.draw()
 agent_positions = {name: None for name in AGENT_NAMES}
 agent_artists = {name: None for name in AGENT_NAMES}
 
-#estimate = None
-#estimate_artist = None
+estimates = {name: None for name in AGENT_NAMES}
+estimate_artists = {name: None for name in AGENT_NAMES}
 
 def agent_callback(msg, name):
     global agent_positions
@@ -54,6 +54,19 @@ for name in AGENT_NAMES:
         callback_args=name,
         queue_size=1)
 
+def estimate_callback(msg, name):
+    global estimates
+    LOCK.acquire()
+    estimates[name] = [msg.x, msg.y]
+    LOCK.release()
+for name in AGENT_NAMES:
+    rp.Subscriber(
+        name=name+'/estimate',
+        data_class=gms.Point,
+        callback=estimate_callback,
+        callback_args=name,
+        queue_size=1)
+
 # def estimate_callback(msg):
 #     global estimate
 #     LOCK.acquire()
@@ -65,24 +78,24 @@ for name in AGENT_NAMES:
 
 while not rp.is_shutdown():
     ag_pos = {name: None for name in AGENT_NAMES}
-    est = None
+    est = {name: None for name in AGENT_NAMES}
     LOCK.acquire()
     for name in AGENT_NAMES:
         if not agent_positions[name] is None:
             ag_pos[name] = cp.copy(agent_positions[name])
             agent_positions[name] = None
-    # if not estimate is None:
-    #     est = cp.copy(estimate)
-    #     estimate = None
+        if not estimates[name] is None:
+            est[name] = cp.copy(estimates[name])
+            estimates[name] = None
     LOCK.release()
     for name in AGENT_NAMES:
         if not ag_pos[name] is None:
             if not agent_artists[name] is None:
                 agent_artists[name].remove()
             agent_artists[name] = plt.scatter(*ag_pos[name], color=AGENT_COLOR)
-    # if not est is None:
-    #     if not estimate_artist is None:
-    #         estimate_artist.remove()
-    #     estimate_artist = plt.scatter(*est, color=ESTIMATE_COLOR)
+        if not est[name] is None:
+            if not estimate_artists[name] is None:
+                estimate_artists[name].remove()
+            estimate_artists[name] = plt.scatter(*est[name], color=ESTIMATE_COLOR)
     plt.draw()
     RATE.sleep()

@@ -4,9 +4,7 @@
   <arg name='agent_names' value='antonio elias ivan'/>
   <param name='agent_names' value='$(arg agent_names)'/>
 
-  <rosparam param='target_position'>
-    [1.0, -1.0]
-  </rosparam>
+  <rosparam command='load' file='$(find circumnavigation-planner)/param/target.yaml'/>
 
   <!--remap from='antonio/neighbor_bearing_measurement' to='elias/bearing_measurement'/-->
   <!--remap from='elias/neighbor_bearing_measurement' to='antonio/bearing_measurement'/-->
@@ -14,12 +12,10 @@
   <group ns='antonio'>
 
     <rosparam param='initial_position'>
-      [0.0, 0.0]
+      [1.5, 1.0]
     </rosparam>
 
-    <rosparam param='target_position'>
-      [1.0, -1.0]
-    </rosparam>
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/target.yaml'/>
 
     <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
 
@@ -29,10 +25,10 @@
       pkg='circumnavigation-planner'
       type='vehicle_simulator.py'/>
 
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
     <rosparam param='initial_estimate'>
       [1.0, 1.0]
     </rosparam>
-
     <node name='planner'
       pkg='circumnavigation-planner'
       type='planner.py'/>
@@ -50,9 +46,7 @@
       [0.0, 2.0]
     </rosparam>
 
-    <rosparam param='target_position'>
-      [1.0, -1.0]
-    </rosparam>
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/target.yaml'/>
 
     <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
 
@@ -63,9 +57,9 @@
       type='vehicle_simulator.py'/>
 
     <rosparam param='initial_estimate'>
-      [1.0, 1.0]
+      [0.0, 1.5]
     </rosparam>
-
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
     <node name='planner'
       pkg='circumnavigation-planner'
       type='planner.py'/>
