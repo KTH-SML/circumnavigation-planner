@@ -47,10 +47,12 @@ def agent_callback(msg, name):
     agent_positions[name] = [msg.x, msg.y]
     LOCK.release()
 for name in AGENT_NAMES:
-    rp.Subscriber(name=name+'/position',
-                  data_class=gms.Point,
-                  callback=agent_callback,
-                  callback_args=name)
+    rp.Subscriber(
+        name=name+'/position',
+        data_class=gms.Point,
+        callback=agent_callback,
+        callback_args=name,
+        queue_size=1)
 
 # def estimate_callback(msg):
 #     global estimate

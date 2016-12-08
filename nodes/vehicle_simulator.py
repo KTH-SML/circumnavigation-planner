@@ -19,10 +19,12 @@ LOCK = thd.Lock()
 position = np.array(rp.get_param('initial_position'))
 velocity = None
 
+
 XMIN = rp.get_param('xmin')
 XMAX = rp.get_param('xmax')
 YMIN = rp.get_param('ymin')
 YMAX = rp.get_param('ymax')
+
 
 rp.init_node('integrator')
 FREQUENCY = 3e1
@@ -30,18 +32,24 @@ RATE = rp.Rate(FREQUENCY)
 TIME_STEP = 1.0/FREQUENCY
 pub = rp.Publisher('position', gms.Point, queue_size=10)
 
+
 def cmdvel_callback(msg):
     global velocity
     LOCK.acquire()
     velocity = np.array([msg.x, msg.y])
     LOCK.release()
-rp.Subscriber('cmdvel', gms.Vector, callback=cmdvel_callback)
+rp.Subscriber(
+    name='cmdvel',
+    data_class=gms.Vector,
+    callback=cmdvel_callback,
+    queue_size=1)
 
-start_flag = False
-while not rp.is_shutdown() and not start_flag:
+
+start = False
+while not rp.is_shutdown() and not start:
     LOCK.acquire()
     if not velocity is None:
-        start_flag = True
+        start = True
     else:
         rp.logwarn('waiting for cmdvel')
     LOCK.release()
