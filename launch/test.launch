@@ -1,0 +1,30 @@
+<launch>
+
+
+  <arg name='agent_names' value='antonio elias ivan'/>
+  <param name='agent_names' value='$(arg agent_names)'/>
+
+
+  <group ns='antonio'>
+
+    <rosparam param='initial_position'>
+      [0.0, 0.0]
+    </rosparam>
+
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
+
+    <node name='simulator'
+      pkg='circumnavigation-planner'
+      type='simulator.py'/>
+
+  </group>
+
+
+  <rosparam command='load' file='$(find circumnavigation-planner)/param/plotter.yaml'/>
+
+  <node name='plotter'
+    pkg='circumnavigation-planner'
+    type='plotter.py'/>
+
+
+</launch>
