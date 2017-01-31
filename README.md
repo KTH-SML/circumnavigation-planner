@@ -1,6 +1,6 @@
 # circumnavigation-planner
 
-A ROS package for target tracking and circumnavigation.
+A ROS package for target tracking and circumnavigation, for the scenario of stationary target and estimated target position.
 
 ## Installation
 
