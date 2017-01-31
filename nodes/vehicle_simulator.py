@@ -8,28 +8,26 @@ import threading as thd
 import numpy as np
 
 
-
-def ccws_perp(array):
-    x = array[0]
-    y = array[1]
-    return np.array([-y, x])
-
-
 LOCK = thd.Lock()
+#Initial position
 position = np.array(rp.get_param('initial_position'))
+#Velocity
 velocity = None
 
 
-XMIN = rp.get_param('xmin')
+XMIN = rp.get_param('xmin') 
 XMAX = rp.get_param('xmax')
 YMIN = rp.get_param('ymin')
 YMAX = rp.get_param('ymax')
 
 
 rp.init_node('integrator')
-FREQUENCY = 3e1
+
+FREQUENCY = 10e1
 RATE = rp.Rate(FREQUENCY)
 TIME_STEP = 1.0/FREQUENCY
+
+#Publisher
 pub = rp.Publisher('position', gms.Point, queue_size=10)
 
 
@@ -42,7 +40,7 @@ rp.Subscriber(
     name='cmdvel',
     data_class=gms.Vector,
     callback=cmdvel_callback,
-    queue_size=1)
+    queue_size=10)
 
 
 start = False
@@ -50,18 +48,17 @@ while not rp.is_shutdown() and not start:
     LOCK.acquire()
     if not velocity is None:
         start = True
-    else:
-        rp.logwarn('waiting for cmdvel')
+    #else:
+        #rp.logwarn('waiting for cmdvel')
     LOCK.release()
+    #Initial position publishing
     pub.publish(gms.Point(x=position[0], y=position[1]))
     RATE.sleep()
 while not rp.is_shutdown():
     LOCK.acquire()
-    newpos = position+velocity*TIME_STEP
-    #if newpos[0] >= XMIN and newpos[0] <= XMAX and newpos[1] >= YMIN and newpos[1] <= YMAX:
-    #    position = newpos
-    position = newpos
-    velocity = np.zeros(2)
+    #Integration
+    position = position+velocity*TIME_STEP
     LOCK.release()
+    #Position publishing
     pub.publish(gms.Point(x=position[0], y=position[1]))
     RATE.sleep()
