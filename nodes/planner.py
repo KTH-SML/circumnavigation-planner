@@ -29,16 +29,17 @@ def Counterclockwise_angle(bearing_measurement,neighbor_bearing_measurement):
 	phi_j=np.array([neighbor_bearing_measurement[0],neighbor_bearing_measurement[1],0.0])
 	n_i=np.linalg.norm(phi_i)
 	n_j=np.linalg.norm(phi_j)
+
 	sp=np.inner(phi_i,phi_j)
 	vp=np.cross(phi_i,phi_j)
 	cos_beta=sp/(n_i*n_j)
-	sin_beta=np.linalg.norm(vp)/(n_i*n_j)
-	n=vp/(n_i*n_j*sin_beta)
+	sin_beta=vp[2]/(n_i*n_j)
+
 	beta=math.atan2(sin_beta,cos_beta)
-	beta=beta*180/math.pi  # Convertion of the angle from radians to degrees 
-	if n[2]==-1:
-		beta=360-beta
-	beta=beta*math.pi/180
+	 
+	if beta<0:
+		beta=beta+2*math.pi
+	
 	return beta 
 
 #Subscribers
@@ -114,7 +115,7 @@ while not rp.is_shutdown():
 	beta=Counterclockwise_angle(bearing_measurement,neighbor_bearing_measurement)
 	#Control law
 	est_dist = np.linalg.norm(estimate-position)
-	vel = bearing_measurement*(est_dist-DESIRED_DISTANCE)+0.15*phi_bar*(alpha+beta)#0.1*
+	vel = bearing_measurement*(est_dist-DESIRED_DISTANCE)+0.3*est_dist*phi_bar*(alpha+beta)
 	#Velocity message
 	cmdvel_msg = gms.Vector(x=vel[0], y=vel[1])
 	LOCK.release()
