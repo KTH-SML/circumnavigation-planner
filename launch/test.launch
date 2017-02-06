@@ -13,20 +13,20 @@
       [1.0, 3.0]
     </rosparam>
 
-    <rosparam param='initial_estimate'>
-      [0.8, 0.9]
-    </rosparam>
-
     <rosparam command='load' file='$(find circumnavigation-planner)/param/target.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/estimate.yaml'/>
+
     <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
-    
-    <remap from='neighbor_bearing_measurement' to='/agent2/bearing_measurement'/>
+
+    <remap from='neighbor_bearing_measurement' to='/agent4/bearing_measurement'/>
 
     <node name='vehicle_simulator'
       pkg='circumnavigation-planner'
       type='vehicle_simulator.py'/>
+
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
+    <rosparam param='initial_estimate'>
+      [0.8, 0.9]
+    </rosparam>
 
     <node name='planner'
       pkg='circumnavigation-planner'
@@ -48,22 +48,21 @@
     <rosparam param='initial_position'>
       [0.0, 0.0]
     </rosparam>
-    
-    <rosparam param='initial_estimate'>
-      [0.85, 1.1]
-    </rosparam>
 
     <rosparam command='load' file='$(find circumnavigation-planner)/param/target.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/estimate.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
 
-    <remap from='neighbor_bearing_measurement' to='/agent3/bearing_measurement'/>
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
+
+    <remap from='neighbor_bearing_measurement' to='/agent1/bearing_measurement'/>
 
     <node name='vehicle_simulator'
       pkg='circumnavigation-planner'
       type='vehicle_simulator.py'/>
-    
+
+    <rosparam param='initial_estimate'>
+      [0.85, 1.1]
+    </rosparam>
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
     <node name='planner'
       pkg='circumnavigation-planner'
       type='planner.py'/>
@@ -84,21 +83,20 @@
       [1.5, -1.0]
     </rosparam>
 
-    <rosparam param='initial_estimate'>
-      [0.55, 1.1]
-    </rosparam>
-
     <rosparam command='load' file='$(find circumnavigation-planner)/param/target.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/estimate.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
 
-    <remap from='neighbor_bearing_measurement' to='/agent4/bearing_measurement'/>
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
+
+    <remap from='neighbor_bearing_measurement' to='/agent2/bearing_measurement'/>
 
     <node name='vehicle_simulator'
       pkg='circumnavigation-planner'
       type='vehicle_simulator.py'/>
-    
+
+    <rosparam param='initial_estimate'>
+      [0.55, 1.1]
+    </rosparam>
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
     <node name='planner'
       pkg='circumnavigation-planner'
       type='planner.py'/>
@@ -119,21 +117,20 @@
       [3.0, 2.0]
     </rosparam>
 
-    <rosparam param='initial_estimate'>
-      [0.75, 1.3]
-    </rosparam>
-
     <rosparam command='load' file='$(find circumnavigation-planner)/param/target.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/estimate.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
-    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
 
-    <remap from='neighbor_bearing_measurement' to='/agent1/bearing_measurement'/>
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/simulator.yaml'/>
+
+    <remap from='neighbor_bearing_measurement' to='/agent3/bearing_measurement'/>
 
     <node name='vehicle_simulator'
       pkg='circumnavigation-planner'
       type='vehicle_simulator.py'/>
-    
+
+    <rosparam param='initial_estimate'>
+      [0.75, 1.3]
+    </rosparam>
+    <rosparam command='load' file='$(find circumnavigation-planner)/param/planner.yaml'/>
     <node name='planner'
       pkg='circumnavigation-planner'
       type='planner.py'/>
